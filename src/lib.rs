@@ -86,7 +86,7 @@ use std::pin::Pin;
 /// A process can then yield `ItemState` instead of `Effect` types:
 ///
 /// ```
-/// #![feature (generators, generator_trait)]
+/// #![feature(generators, generator_trait)]
 /// use desim::{Effect, SimState, Simulation};
 ///
 /// // enum used as part of state logged during simulation
@@ -271,11 +271,7 @@ impl<T: SimState + Clone> Simulation<T> {
     /// yielding `Effect::Event` from a process during the simulation.
     // TODO: Review this API
     pub fn schedule_event(&mut self, time: f64, process: ProcessId, state: T) {
-        self.future_events.push(Reverse(Event {
-            time,
-            process,
-            state,
-        }));
+        self.future_events.push(Reverse(Event { time, process, state }));
     }
 
     fn log_processed_event(&mut self, event: &Event<T>, sim_state: T) {
@@ -421,9 +417,14 @@ impl<T> SimContext<T> {
         self.time
     }
 
-    /// Returns the `Effect` that caused the process to wake up
+    /// Returns the `State` that caused the process to wake up
     pub fn state(&self) -> &T {
         &self.state
+    }
+
+    /// Returns the `State` that caused the process to wake up
+    pub fn into_state(self) -> T {
+        self.state
     }
 }
 

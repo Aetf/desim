@@ -436,6 +436,10 @@ impl<T> Event<T> {
     pub fn process(&self) -> ProcessId {
         self.process
     }
+
+    pub fn state(&self) -> &T {
+        &self.state
+    }
 }
 
 impl<T: SimState + Clone> Default for Simulation<T> {
